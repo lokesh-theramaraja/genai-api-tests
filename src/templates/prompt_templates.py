@@ -50,7 +50,7 @@ Include appropriate assertions for:
 
 Use REST Assured best practices and include clear test documentation.
 Use REST Assured given().log().ifValidationFails() for each test.
-Provide maven dependencies file for all required libraries in comments at the top.
+Provide pom.xml for all the required dependencies in comments at the top of output.
 Anything other than java code should be commented.
 
 """
@@ -92,7 +92,7 @@ Include:
 5. Response validation
 6. Error handling
 
-Output the collection in JSON format. Use Postman best practices.
+Output the collection in proper JSON format. Use Postman best practices.
 """
 
 # SYSTEM_PROMPT = """You are an expert API test automation engineer. 
@@ -109,12 +109,12 @@ Focus on both technical correctness and business logic validation.
 Include detailed assertions and error validations.
 
 Important guidelines:
-1. DO NOT use markdown formatting or code blocks
-2. DO NOT wrap code in backticks
-3. Output only the implementation code
-4. Include necessary package and import statements
-5. Use proper code formatting and indentation
-6. Add code comments where needed
+1. DO NOT use markdown formatting or code blocks.
+2. DO NOT wrap code in backticks.
+3. Output only the implementation code.
+4. Include necessary package and import statements.
+5. Use proper code formatting and indentation.
+6. Add code comments where needed.
 """
 
 TEMPLATES = {
