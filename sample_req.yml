@@ -1,0 +1,66 @@
+openapi: 3.0.3
+info:
+  title: ReqRes API
+  description: A sample API to retrieve users (dummy API).
+  version: 1.0.0
+
+servers:
+  - url: https://reqres.in/api
+
+paths:
+  /users:
+    get:
+      summary: Get list of users (paginated)
+      description: Retrieves a paginated list of users.
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            example: 2
+          description: Page number to retrieve
+      responses:
+        '200':
+          description: A paginated list of users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  page:
+                    type: integer
+                  per_page:
+                    type: integer
+                  total:
+                    type: integer
+                  total_pages:
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        email:
+                          type: string
+                          format: email
+                        first_name:
+                          type: string
+                        last_name:
+                          type: string
+                        avatar:
+                          type: string
+                          format: uri
+                  support:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                        format: uri
+                      text:
+                        type: string
+        '400':
+          description: Bad Request
+        '500':
+          description: Server Error

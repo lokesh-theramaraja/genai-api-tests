@@ -30,12 +30,15 @@ class APITestApp:
     def init_streamlit(self):
         """Initialize Streamlit page configuration."""
         st.set_page_config(
-            page_title="API Test Generator",
+            page_title="API Tests Generator",
             layout="centered",
             initial_sidebar_state="expanded"
         )
-        st.title("🧪 API Test Generator")
-        st.caption("Generate API tests from OpenAPI/Swagger specifications")
+        st.title("🚀✨ API Tests Generator")
+        st.markdown("""
+        This application generates API test scripts from OpenAPI/Swagger specifications.
+        It supports multiple test frameworks and provides a user-friendly interface for selecting endpoints and generating tests.
+        """)
 
     def run(self):
         """Run the main application loop."""
@@ -54,6 +57,15 @@ class APITestApp:
             type=["yaml", "yml", "json"],
             help="Select a valid OpenAPI/Swagger specification file"
         )
+    
+    def functionality_input_section(self) -> str:
+        """Handle functionality description input."""
+        st.subheader("Describe API Functionality")
+        return st.text_area(
+            "Provide a brief description of the API functionality",
+            placeholder="E.g., This API endpoint retrieves user details based on user ID",
+            help="This description will be used to enhance the test generation process"
+        )
 
     def process_file(self, uploaded_file: Any):
         """Process the uploaded OpenAPI file."""
@@ -61,6 +73,9 @@ class APITestApp:
             # Parse OpenAPI spec
             parser = OpenAPIParser()
             spec_data = parser.parse(uploaded_file)
+
+            # user functionality input
+            functionality_description = self.functionality_input_section() 
             
             # Framework selection
             framework = self.framework_selection()
@@ -69,7 +84,7 @@ class APITestApp:
             endpoint = self.endpoint_selection(spec_data)
             
             if st.button("Generate Test Script"):
-                self.generate_test_script(framework, endpoint, spec_data)
+                self.generate_test_script(framework, endpoint, spec_data, functionality_description)
                 
         except Exception as e:
             logger.error(f"File processing error: {e}")
@@ -97,7 +112,8 @@ class APITestApp:
         self, 
         framework: str, 
         endpoint: str, 
-        spec_data: Dict
+        spec_data: Dict,
+        functionality_description: str
     ):
         """Generate test script based on selected options."""
         with st.spinner("Generating test script..."):
@@ -106,7 +122,7 @@ class APITestApp:
                     framework=framework,
                     model_config=self.settings.MODEL_CONFIG
                 )
-                test_script = generator.generate(endpoint, spec_data)
+                test_script = generator.generate(endpoint, spec_data, functionality_description)
                 self.display_results(test_script, framework)
             except Exception as e:
                 logger.error(f"Generation error: {e}")
