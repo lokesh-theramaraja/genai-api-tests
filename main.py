@@ -7,6 +7,7 @@ from pathlib import Path
 from src.core.parser import OpenAPIParser
 from src.core.generator import TestGenerator
 from src.config.settings import Settings
+from src.utils.validators import validate_file_type, validate_openapi_spec
 from loguru import logger
 
 class APITestApp:
@@ -70,13 +71,21 @@ class APITestApp:
     def process_file(self, uploaded_file: Any):
         """Process the uploaded OpenAPI file."""
         try:
+            if not validate_file_type(uploaded_file):
+                st.error("Unsupported file type. Please upload a YAML or JSON file.")
+                return
+
             # Parse OpenAPI spec
             parser = OpenAPIParser()
             spec_data = parser.parse(uploaded_file)
 
+            if not validate_openapi_spec(spec_data):
+                st.error("The uploaded file is not a valid OpenAPI specification.")
+                return
+
             # user functionality input
-            functionality_description = self.functionality_input_section() 
-            
+            functionality_description = self.functionality_input_section()
+
             # Framework selection
             framework = self.framework_selection()
             
