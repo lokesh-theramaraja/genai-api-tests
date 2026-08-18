@@ -23,7 +23,7 @@ class TestGenerator:
         genai.configure(api_key=self.settings.GOOGLE_API_KEY)
         self.model = genai.GenerativeModel(model_config["model_name"])
         
-    def generate(self, endpoint: str, spec_data: Dict) -> str:
+    def generate(self, endpoint: str, spec_data: Dict, functionality_description: str) -> str:
         """Generate test script for specified endpoint."""
         try:
             # Parse endpoint
@@ -40,7 +40,8 @@ class TestGenerator:
                 summary=endpoint_details.get('summary', ''),
                 parameters=endpoint_details.get('parameters', []),
                 request_body=endpoint_details.get('requestBody', {}),
-                responses=endpoint_details.get('responses', {})
+                responses=endpoint_details.get('responses', {}),
+                functionality_description=functionality_description
             )
 
             # Generate test script with system prompt

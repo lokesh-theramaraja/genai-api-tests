@@ -1,0 +1,117 @@
+openapi: 3.0.3
+info:
+  title: RESTful Objects API
+  description: A public demo API to manage generic "objects".
+  version: 1.0.0
+
+servers:
+  - url: https://api.restful-api.dev
+
+paths:
+  /objects:
+    get:
+      summary: Get all objects
+      description: Retrieves a list of all stored objects.
+      responses:
+        '200':
+          description: List of objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Object'
+    post:
+      summary: Create a new object
+      description: Creates a new object with a name and optional data.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateObject'
+      responses:
+        '201':
+          description: Object created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Object'
+
+  /objects/{id}:
+    get:
+      summary: Get object by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Single object details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Object'
+        '404':
+          description: Object not found
+    put:
+      summary: Update object by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateObject'
+      responses:
+        '200':
+          description: Object updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Object'
+    delete:
+      summary: Delete object by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Object deleted
+
+components:
+  schemas:
+    Object:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        data:
+          type: object
+          additionalProperties: true
+    CreateObject:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: Apple iPhone 14
+        data:
+          type: object
+          additionalProperties: true
+          example:
+            color: black
+            capacity: "128 GB"
